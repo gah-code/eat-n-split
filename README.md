@@ -10,7 +10,7 @@ React Component:
 The code defines a React functional component called App. This is the main component responsible for rendering the user interface and managing the application's state.
 State Management:
 
-Within the App component, several pieces of state are managed using React's useState hook. These include friends (for storing the list of friends), showAddFriend (for controlling the visibility of an "Add Friend" form), and selectedFriend (for tracking the currently selected friend).
+Within the App component, several pieces of state are managed using React's useState hook. c.clThese include friends (for storing the list of friends), showAddFriend (for controlling the visibility of an "Add Friend" form), and selectedFriend (for tracking the currently selected friend).
 UI Components:
 
 The code defines several UI components, including Button, FriendsList, Friend, FormAddFriend, and FormSplitBill, which are used to structure and render different parts of the application's user interface.
