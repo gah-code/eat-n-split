@@ -32,23 +32,34 @@ function Button({ children, onClick }) {
 
 export default function App() {
   const [friends, setFriends] = useState(initialFriends);
+  const [showAddFriend, setShowAddFriend] = useState(false);
+
+  function handleShowAddFriend() {
+    setShowAddFriend((show) => !show);
+  }
+
+  function handleAddFriend(friend) {
+    setFriends((friends) => [...friends, friend]);
+  }
 
   return (
     <>
       <div className='app'>
         <div className='sidebar'>
-          <FriendsList />
-
-          <Button>Add friend</Button>
+          <FriendsList friends={friends} />
+          {showAddFriend && <FormAddFriend onAddFriend={handleAddFriend} />}
+          <Button onClick={handleShowAddFriend}>
+            {showAddFriend ? 'Close' : 'Add friend'}
+          </Button>
         </div>
+
+        <FormSplitBill />
       </div>
     </>
   );
 }
 
-function FriendsList() {
-  const friends = initialFriends;
-
+function FriendsList({ friends }) {
   return (
     <ul>
       {friends.map((friend) => (
@@ -76,30 +87,76 @@ function Friend({ friend }) {
       )}
       {friend.balance === 0 && <p>You and {friend.name} are even</p>}
 
-      <button className='button'>Select</button>
+      <Button>Select</Button>
     </li>
   );
 }
 
-function FormAddFriend() {
-  return (
-    <form action=''>
-      <label htmlFor=''></label>
-      <input type='text' />
+function FormAddFriend({ onAddFriend }) {
+  const [name, setName] = useState('');
+  const [image, setImage] = useState('https://i.pravatar.cc/48');
 
-      <label htmlFor=''>
-        <input type='text' name='' id='' />
-      </label>
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    if (!name || !image) return;
+
+    const id = crypto.randomUUID();
+
+    const newFriend = {
+      id,
+      name,
+      image: `${image}?=${id}`,
+      balance: 0,
+    };
+    onAddFriend(newFriend);
+
+    setName('');
+    setImage('https://i.pravatar.cc/48');
+  }
+
+  return (
+    <form className='form-add-friend' onSubmit={handleSubmit}>
+      <label>👫 Friend name</label>
+      <input
+        type='text'
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+
+      <label>🌄 Image URL</label>
+      <input
+        type='text'
+        value={image}
+        onChange={(e) => setImage(e.target.value)}
+      />
+
+      <Button>Add</Button>
     </form>
   );
 }
 
-function FormSplitBill(params) {
+function FormSplitBill() {
   return (
     <form className='form-split-bill' action=''>
       <h2>split</h2>
-      <label htmlFor=''></label>
+      <label>💰 Bill value</label>
       <input type='text' name='' id='' />
+
+      <label>🧍‍♀️ Your expense</label>
+      <input type='text' />
+
+      <label>👫 Xs expense</label>
+      <input type='text' disabled />
+
+      <label>🤑 Who is paying the bill</label>
+
+      <select name='' id=''>
+        <option value='user'>You</option>
+        <option value='friend'>friend</option>
+      </select>
+
+      <Button>Split bill</Button>
     </form>
   );
 }
